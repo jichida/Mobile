@@ -31,8 +31,8 @@ class FileInput extends Component {
 
         return (
             <StyleableElement { ...elementProps }
-                              key={ this.state.key }
-                              onChange={ this._onFilesSelected }
+                key={ this.state.key }
+                onChange={ this._onFilesSelected }
             >
                 {
                     this.props.children
@@ -48,9 +48,9 @@ class FileInput extends Component {
     }
 }
 
-const onFilesSelected = function(onChangeEvent) {
-    console.log(onChangeEvent.target)
-    this.props.uploader.methods.addFiles(onChangeEvent.target)
+const onFilesSelected = function(imgArray) {
+    console.log(imgArray)
+    this.props.uploader.methods.addFiles(imgArray)
     this._resetInput()
 }
 

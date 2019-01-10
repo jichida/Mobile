@@ -1,4 +1,5 @@
 import React from 'react'
+import convert from './base64toblob';
 import ImageA from './search_a.png';
 import ImageB from './search_b.png';
 import ImageC from './search_c.png';
@@ -44,27 +45,27 @@ const xviewUploadImage = (param,callback)=>{
 };
 
 const StyleableFileInput = ({ children, className, onChange, ...params }) => {
-  const onClickSelPhoto = ()=>{
-    xviewUploadImage({},(result)=>{
-      console.log(result);
-    });
-  }
-  const onClickChange =(e)=>{
-    console.log('onClickChange---->');
-    console.log(e.target.files);
-    onChange(e);
-    // onClickSelPhoto();
-  }
-  return (
+
+    const onClickSelPhoto = ()=>{
+        xviewUploadImage({},(result)=>{
+            let blobData = [];
+            for( const item of result.data){
+                blobData.push(convert(item))
+            }
+            onChange(blobData);
+        });
+    }
+
+    return (
       <div className={ `react-fine-uploader-file-input-container ${className || ''}` }
            style={ containerStyle }
       >
           { children }
-          <input { ...params }
-                 className='react-fine-uploader-file-input'
-                 onChange={ onClickChange }
-                 style={ inputStyle }
-                 type='file'
+          <div
+                className='react-fine-uploader-file-input'
+                onClick ={ onClickSelPhoto }
+                style={ inputStyle }
+                type='file'
           />
       </div>
   );
