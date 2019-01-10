@@ -28,18 +28,21 @@ class FileInput extends Component {
 
     render() {
         const { text, uploader, ...elementProps } = this.props // eslint-disable-line no-unused-vars
+        const customContainerClassName = this.props.className && this.props.className + '-container'
 
         return (
-            <StyleableElement { ...elementProps }
-                              key={ this.state.key }
-                              onChange={ this._onFilesSelected }
-            >
-                {
-                    this.props.children
-                        ? this.props.children
-                        : <span>{ elementProps.multiple ? text.selectFiles : text.selectFile }</span>
-                }
-            </StyleableElement>
+            <span className={ `react-fine-uploader-thumbnail-container ${customContainerClassName || ''}` }>
+                <StyleableElement { ...elementProps }
+                    key={ this.state.key }
+                    onChange={ this._onFilesSelected }
+                >
+                    {
+                        this.props.children
+                            ? this.props.children
+                            : <span>{ elementProps.multiple ? text.selectFiles : text.selectFile }</span>
+                    }
+                </StyleableElement>
+            </span>
         )
     }
 
@@ -49,7 +52,6 @@ class FileInput extends Component {
 }
 
 const onFilesSelected = function(onChangeEvent) {
-    console.log(onChangeEvent.target)
     this.props.uploader.methods.addFiles(onChangeEvent.target)
     this._resetInput()
 }
