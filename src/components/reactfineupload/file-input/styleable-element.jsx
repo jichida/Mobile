@@ -52,6 +52,7 @@ const StyleableFileInput = ({ children, className, onChange, ...params }) => {
             for( const item of result.data){
                 blobData.push(convert(item))
             }
+
             onChange(blobData);
         });
     }

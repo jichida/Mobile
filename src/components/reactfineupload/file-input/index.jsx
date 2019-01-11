@@ -49,7 +49,6 @@ class FileInput extends Component {
 }
 
 const onFilesSelected = function(imgArray) {
-    console.log(imgArray)
     this.props.uploader.methods.addFiles(imgArray)
     this._resetInput()
 }

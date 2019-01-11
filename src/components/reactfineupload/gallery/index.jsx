@@ -48,59 +48,121 @@ class Gallery extends Component {
 
         this.state = {
             visibleFiles: [],
-            completedFiles: [],
         }
 
         this.props.uploader.methods.addInitialFiles(this.props.files);
+        
+        // for( const file of this.props.files){
+        //     this.state.visibleFiles.push({id: file.id, fromServer: true})
+        // }
 
-        for( const file of this.props.files){
-            this.state.visibleFiles.push({id: file.id, fromServer: true})
-        }
+        // const statusEnum = props.uploader.qq.status
 
-        let files = this.props.uploader.methods.getUploads();
-        console.log(files);
+        // this._onStatusChange = (id, oldStatus, status) => {
+        //     const visibleFiles = this.state.visibleFiles
 
-        const statusEnum = props.uploader.qq.status
+        //     if (status === statusEnum.SUBMITTED) {
+        //         visibleFiles.push({ id })
+        //         this.setState({ visibleFiles })
+        //     }
+        //     else if (isFileGone(status, statusEnum)) {
+        //         this._removeVisibleFile(id)
+        //     }
+        //     else if (status === statusEnum.UPLOAD_SUCCESSFUL|| status === statusEnum.UPLOAD_FAILED) {
+        //         if (status === statusEnum.UPLOAD_SUCCESSFUL) {
+        //             const visibleFileIndex = this._findFileIndex(id)
+        //             if (visibleFileIndex < 0) {
+        //                 visibleFiles.push({ id, fromServer: true })
+        //             } 
+        //         }
+        //         this._updateVisibleFileStatus(id, status)
+        //     }
 
-        this._onStatusChange = (id, oldStatus, status) => {
-            const visibleFiles = this.state.visibleFiles
-
-            if (status === statusEnum.SUBMITTED) {
-                visibleFiles.push({ id })
-                this.setState({ visibleFiles })
-            }
-            else if (isFileGone(status, statusEnum)) {
-                this._removeVisibleFile(id)
-            }
-            else if (status === statusEnum.UPLOAD_SUCCESSFUL|| status === statusEnum.UPLOAD_FAILED) {
-                if (status === statusEnum.UPLOAD_SUCCESSFUL) {
-                    const visibleFileIndex = this._findFileIndex(id)
-                    if (visibleFileIndex < 0) {
-                        visibleFiles.push({ id, fromServer: true })
-                    } 
-                }
-                this._updateVisibleFileStatus(id, status)
-            }
-
-        }
+        // }
 
         this._onComplete = (id, name, res) => {
-            const completedFiles = this.state.completedFiles;
-            completedFiles.push({id, name});
-            this.setState({completedFiles});
-            console.log(id)
-            console.log(name)
-            console.log(JSON.stringify(res))
+            // const visibleFiles = this.state.visibleFiles;
+            // visibleFiles.push({id});
+
+            const files = this.props.files;
+            const fromServer = false;
+            files.push({id, name, fromServer})
+            this.props.onChange(files);
+        }
+
+        this.handleDelete = (id) => {
+            const fileIndex = this._findFileIndex(id);
+            if (fileIndex >= 0) {
+                const files = this.props.files;
+                files.splice(fileIndex, 1);
+                this.props.onChange(files);
+            }
         }
     }
 
     componentDidMount() {
-        this.props.uploader.on('statusChange', this._onStatusChange)
+        // this.props.uploader.on('statusChange', this._onStatusChange)
         this.props.uploader.on('complete', this._onComplete)
     }
 
     componentWillUnmount() {
-        this.props.uploader.off('statusChange', this._onStatusChange)
+        // this.props.uploader.off('statusChange', this._onStatusChange)
+        this.props.uploader.off('complete', this._onComplete)
+    }
+
+    // componentWillUpdate(nextProps, nextState) {
+    //     //this.props.uploader.methods.addInitialFiles(nextProps.files);
+
+    //     if(nextProps.files){
+    //         const visibleFiles = [];
+    //         nextProps.files.map((item)=>{
+    //             visibleFiles.push({id: item.id, fromServer: true})
+    //         })
+    //         this.setState({visibleFiles})
+    //     }
+    //     console.log(this.state.visibleFiles);
+    // }
+
+    // _removeVisibleFile(id) {
+    //     const visibleFileIndex = this._findFileIndex(id)
+
+    //     if (visibleFileIndex >= 0) {
+    //         const visibleFiles = visibleFiles
+
+    //         visibleFiles.splice(visibleFileIndex, 1)
+    //         this.setState({ visibleFiles })
+    //     }
+    // }
+
+    // _updateVisibleFileStatus(id, status) {
+    //     visibleFiles.some(file => {
+    //         if (file.id === id) {
+    //             file.status = status
+    //             this.setState({ visibleFiles: visibleFiles })
+    //             return true
+    //         }
+    //     })
+    // }
+
+    _findFileIndex(id) {
+        let visibleFileIndex = -1
+
+        // visibleFiles.some((file, index) => {
+        //     if (file.id === id) {
+        //         visibleFileIndex = index
+        //         return true
+        //     }
+        // })
+
+        this.props.files.some((file, index) => {
+            if (file.id === id) {
+                visibleFileIndex = index
+                return true
+            }
+        })
+
+
+        return visibleFileIndex
     }
 
     render() {
@@ -120,9 +182,16 @@ class Gallery extends Component {
         const deleteButtonProps = deleteEnabled && getComponentProps('deleteButton', this.props)
         const pauseResumeButtonProps = chunkingEnabled && getComponentProps('pauseResumeButton', this.props)
 
+        const visibleFiles = [];
+        
+        for( const file of this.props.files){
+            visibleFiles.push({id: file.id, fromServer: file.fromServer})
+        }
+
+
         return (
             <MaybeDropzone content={ this.props.children }
-                hasVisibleFiles={ this.state.visibleFiles.length > 0 }
+                hasVisibleFiles={ visibleFiles.length > 0 }
                 uploader={ uploader }
                 { ...dropzoneProps }
             >
@@ -141,7 +210,7 @@ class Gallery extends Component {
                     exit={!this.props.animationsDisabled}
                 >
                     {
-                        this.state.visibleFiles.map(({ id, status, fromServer }) => (
+                        visibleFiles.map(({ id, status, fromServer }) => (
                             <CSSTransition
                                 key={id}
                                 classNames="react-fine-uploader-gallery-files"
@@ -207,6 +276,7 @@ class Gallery extends Component {
                                             <DeleteButton className='react-fine-uploader-gallery-delete-button'
                                                 id={ id }
                                                 uploader={ uploader }
+                                                delete={ this.handleDelete}
                                                 { ...deleteButtonProps }
                                             />
                                     }
@@ -235,40 +305,6 @@ class Gallery extends Component {
                 
             </MaybeDropzone>
         )
-    }
-
-    _removeVisibleFile(id) {
-        const visibleFileIndex = this._findFileIndex(id)
-
-        if (visibleFileIndex >= 0) {
-            const visibleFiles = this.state.visibleFiles
-
-            visibleFiles.splice(visibleFileIndex, 1)
-            this.setState({ visibleFiles })
-        }
-    }
-
-    _updateVisibleFileStatus(id, status) {
-        this.state.visibleFiles.some(file => {
-            if (file.id === id) {
-                file.status = status
-                this.setState({ visibleFiles: this.state.visibleFiles })
-                return true
-            }
-        })
-    }
-
-    _findFileIndex(id) {
-        let visibleFileIndex = -1
-
-        this.state.visibleFiles.some((file, index) => {
-            if (file.id === id) {
-                visibleFileIndex = index
-                return true
-            }
-        })
-
-        return visibleFileIndex
     }
 }
 
