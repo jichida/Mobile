@@ -12,27 +12,31 @@ import ImageA from './search_a.png';
 import ImageB from './search_b.png';
 import ImageC from './search_c.png';
 
-const initFiles = [
-  {
-    'id': 0,
-    'name': 'IMG_20180803_181224.jpg',
-    // 'size': 4266973,
-    // 'uuid': '53e6d67e-ea73-41d2-8780-9798a474e45f',
-    'thumbnailUrl': 'http://29e5534ea20a8.cdn.sohucs.com/c_zoom,h_213/c_cut,x_32,y_0,w_600,h_400/os/news/99f9b0799cac0675cd1df356629e0568.jpg',
-    'fromServer': true,
-  },
-  {
-    'id':1,
-    'name': 'IMG_20180803_181348.jpg',
-    // 'size': 2799364,
-    // 'uuid': '3432d592-ceaf-45ff-b8a4-42802bed0723',
-    'thumbnailUrl': 'https://club2.autoimg.cn/album/g2/M01/F0/47/userphotos/2018/12/26/14/500_ChcCRFwjJlaAZjvlAALrNp2gNBo387.jpg',
-    'fromServer': true,
-  },
-]
+// const initFiles = [
+//   {
+//     'id': 0,
+//     'name': 'IMG_20180803_181224.jpg',
+//     // 'size': 4266973,
+//     // 'uuid': '53e6d67e-ea73-41d2-8780-9798a474e45f',
+//     'thumbnailUrl': 'http://29e5534ea20a8.cdn.sohucs.com/c_zoom,h_213/c_cut,x_32,y_0,w_600,h_400/os/news/99f9b0799cac0675cd1df356629e0568.jpg',
+//     'fromServer': true,
+//   },
+//   {
+//     'id':1,
+//     'name': 'IMG_20180803_181348.jpg',
+//     // 'size': 2799364,
+//     // 'uuid': '3432d592-ceaf-45ff-b8a4-42802bed0723',
+//     'thumbnailUrl': 'https://club2.autoimg.cn/album/g2/M01/F0/47/userphotos/2018/12/26/14/500_ChcCRFwjJlaAZjvlAALrNp2gNBo387.jpg',
+//     'fromServer': true,
+//   },
+// ]
 
 //接口应该用如下的：
-// const initFiles = [ 'http://29e5534ea20a8.cdn.sohucs.com/c_zoom,h_213/c_cut,x_32,y_0,w_600,h_400/os/news/99f9b0799cac0675cd1df356629e0568.jpg','http://29e5534ea20a8.cdn.sohucs.com/c_zoom,h_213/c_cut,x_32,y_0,w_600,h_400/os/news/99f9b0799cac0675cd1df356629e0568.jpg'];
+const initFiles = [ 
+  'http://29e5534ea20a8.cdn.sohucs.com/c_zoom,h_213/c_cut,x_32,y_0,w_600,h_400/os/news/99f9b0799cac0675cd1df356629e0568.jpg',
+  'http://29e5534ea20a8.cdn.sohucs.com/c_zoom,h_213/c_cut,x_32,y_0,w_600,h_400/os/news/99f9b0799cac0675cd1df356629e0568.jpg'
+];
+
 const uploader = new FineUploaderTraditional({
   options: {
       chunking: {
@@ -90,8 +94,16 @@ class Index extends Component {
         <Gallery uploader={ uploader } 
                 files={this.state.files} 
                 onChange={this.handleChange} 
+                baseUrl={'/'} //上传图片目录
                 xviewUploadImage={this.xviewUploadImage}  
         />
+      </div>
+      <div style={{marginTop: '30px', backgroundColor: '#fff', color: '#000'}}>
+        {this.state.files.map((item)=>{
+          return (
+            <p>{item}</p>
+          )
+        })}
       </div>
       </div>
     );

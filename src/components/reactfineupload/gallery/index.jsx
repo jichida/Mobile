@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import _map from 'lodash.map'
 import PropTypes from 'prop-types'
 import {CSSTransition, TransitionGroup} from 'react-transition-group'
 
@@ -21,7 +22,20 @@ import UploadFailedIcon from './upload-failed-icon'
 import UploadSuccessIcon from './upload-success-icon'
 import XIcon from './x-icon'
 
-let files = []
+// const visibleFiles = [];
+
+const getInitFiles = (files) => {
+    const initFiles = [];
+    _map(files, (v, i)=>{
+        initFiles.push(
+            {
+                id: i, 
+                thumbnailUrl: v,
+                fromServer: true,
+            })
+    })
+    return initFiles;
+}
 
 class Gallery extends Component {
     static propTypes = {
@@ -50,7 +64,9 @@ class Gallery extends Component {
             visibleFiles: [],
         }
 
-        this.props.uploader.methods.addInitialFiles(this.props.files);
+        
+        this.state.visibleFiles = getInitFiles(this.props.files)
+        this.props.uploader.methods.addInitialFiles(this.state.visibleFiles);
         
         // for( const file of this.props.files){
         //     this.state.visibleFiles.push({id: file.id, fromServer: true})
@@ -81,26 +97,30 @@ class Gallery extends Component {
         // }
 
         this._onComplete = (id, name, res) => {
-            // const visibleFiles = this.state.visibleFiles;
-            // visibleFiles.push({id});
-
-            console.log('Upload Complete...')
+            const visibleFiles = this.state.visibleFiles;
+            const fromServer = false;
+            visibleFiles.push({id, fromServer});
 
             const files = this.props.files;
-            const fromServer = false;
-            files.push({id, name, fromServer})
+            files.push(`${this.props.baseUrl}${name}`)
             this.props.onChange(files);
         }
 
         this.handleDelete = (id) => {
             const fileIndex = this._findFileIndex(id);
             if (fileIndex >= 0) {
+                const visibleFiles = this.state.visibleFiles;
+                visibleFiles.splice(fileIndex, 1)
+                this.setState({visibleFiles})
+                
                 const files = this.props.files;
-                files.splice(fileIndex, 1);
+                files.splice(id, 1);
                 this.props.onChange(files);
             }
         }
+
     }
+
 
     componentDidMount() {
         // this.props.uploader.on('statusChange', this._onStatusChange)
@@ -149,19 +169,19 @@ class Gallery extends Component {
     _findFileIndex(id) {
         let visibleFileIndex = -1
 
-        // visibleFiles.some((file, index) => {
-        //     if (file.id === id) {
-        //         visibleFileIndex = index
-        //         return true
-        //     }
-        // })
-
-        this.props.files.some((file, index) => {
+        this.state.visibleFiles.some((file, index) => {
             if (file.id === id) {
                 visibleFileIndex = index
                 return true
             }
         })
+
+        // this.props.files.some((file, index) => {
+        //     if (file.id === id) {
+        //         visibleFileIndex = index
+        //         return true
+        //     }
+        // })
 
 
         return visibleFileIndex
@@ -185,11 +205,15 @@ class Gallery extends Component {
         const deleteButtonProps = deleteEnabled && getComponentProps('deleteButton', this.props)
         // const pauseResumeButtonProps = chunkingEnabled && getComponentProps('pauseResumeButton', this.props)
 
-        const visibleFiles = [];
+        const visibleFiles = this.state.visibleFiles;
         
-        for( const file of this.props.files){
-            visibleFiles.push({id: file.id, fromServer: file.fromServer})
-        }
+        // for( const file of this.props.files){
+        //     visibleFiles.push({id: file.id, fromServer: file.fromServer})
+        // }
+
+        // _map(this.props.files, (v, i)=>{
+        //     visibleFiles.push({id: i, fromServer: true})
+        // })
 
 
         return (
