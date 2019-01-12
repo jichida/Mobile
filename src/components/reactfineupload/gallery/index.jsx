@@ -166,21 +166,21 @@ class Gallery extends Component {
     }
 
     render() {
-        const cancelButtonProps = getComponentProps('cancelButton', this.props)
+        // const cancelButtonProps = getComponentProps('cancelButton', this.props)
         const dropzoneProps = getComponentProps('dropzone', this.props)
         const fileInputProps = getComponentProps('fileInput', this.props)
-        const filenameProps = getComponentProps('filename', this.props)
-        const filesizeProps = getComponentProps('filesize', this.props)
+        // const filenameProps = getComponentProps('filename', this.props)
+        // const filesizeProps = getComponentProps('filesize', this.props)
         const progressBarProps = getComponentProps('progressBar', this.props)
-        const retryButtonProps = getComponentProps('retryButton', this.props)
-        const statusProps = getComponentProps('status', this.props)
+        // const retryButtonProps = getComponentProps('retryButton', this.props)
+        // const statusProps = getComponentProps('status', this.props)
         const thumbnailProps = getComponentProps('thumbnail', this.props)
         const uploader = this.props.uploader
 
-        const chunkingEnabled = uploader.options.chunking && uploader.options.chunking.enabled
+        // const chunkingEnabled = uploader.options.chunking && uploader.options.chunking.enabled
         const deleteEnabled = uploader.options.deleteFile && uploader.options.deleteFile.enabled
         const deleteButtonProps = deleteEnabled && getComponentProps('deleteButton', this.props)
-        const pauseResumeButtonProps = chunkingEnabled && getComponentProps('pauseResumeButton', this.props)
+        // const pauseResumeButtonProps = chunkingEnabled && getComponentProps('pauseResumeButton', this.props)
 
         const visibleFiles = [];
         
