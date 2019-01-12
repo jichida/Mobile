@@ -32,7 +32,7 @@ import ImageC from './search_c.png';
 // ]
 
 //接口应该用如下的：
-const initFiles = [ 
+const initFiles = [
   'http://29e5534ea20a8.cdn.sohucs.com/c_zoom,h_213/c_cut,x_32,y_0,w_600,h_400/os/news/99f9b0799cac0675cd1df356629e0568.jpg',
   'http://29e5534ea20a8.cdn.sohucs.com/c_zoom,h_213/c_cut,x_32,y_0,w_600,h_400/os/news/99f9b0799cac0675cd1df356629e0568.jpg'
 ];
@@ -44,10 +44,10 @@ const uploader = new FineUploaderTraditional({
       },
       deleteFile: {
           enabled: true,
-          endpoint: 'http://yt.i2u.top:4101/fineuploads'
+          endpoint: 'http://yt.i2u.top:6012/fineuploads'
       },
       request: {
-          endpoint: 'http://yt.i2u.top:4101/fineuploads'
+          endpoint: 'http://yt.i2u.top:6012/fineuploads'
       },
       retry: {
           enableAuto: true
@@ -62,7 +62,7 @@ class Index extends Component {
       files : initFiles
     }
   }
-  
+
 
   handleChange = (files) => {
     this.setState({
@@ -91,11 +91,11 @@ class Index extends Component {
         height:'100%'
   }}>
       <div className="search_box">
-        <Gallery uploader={ uploader } 
-                files={this.state.files} 
-                onChange={this.handleChange} 
+        <Gallery uploader={ uploader }
+                files={this.state.files}
+                onChange={this.handleChange}
                 baseUrl={'/'} //上传图片目录
-                xviewUploadImage={this.xviewUploadImage}  
+                xviewUploadImage={this.xviewUploadImage}
         />
       </div>
       <div style={{marginTop: '30px', backgroundColor: '#fff', color: '#000'}}>
