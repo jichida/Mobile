@@ -3,7 +3,7 @@ import convert from './base64toblob';
 
 
 const containerStyle = {
-    display: 'inline-block',
+    display: 'block',
     position: 'relative'
 }
 
