@@ -84,6 +84,8 @@ class Gallery extends Component {
             // const visibleFiles = this.state.visibleFiles;
             // visibleFiles.push({id});
 
+            console.log('Upload Complete...')
+
             const files = this.props.files;
             const fromServer = false;
             files.push({id, name, fromServer})
@@ -176,6 +178,7 @@ class Gallery extends Component {
         // const statusProps = getComponentProps('status', this.props)
         const thumbnailProps = getComponentProps('thumbnail', this.props)
         const uploader = this.props.uploader
+        const xviewUploadImage = this.props.xviewUploadImage
 
         // const chunkingEnabled = uploader.options.chunking && uploader.options.chunking.enabled
         const deleteEnabled = uploader.options.deleteFile && uploader.options.deleteFile.enabled
@@ -298,7 +301,7 @@ class Gallery extends Component {
                         timeout={{ enter: 500, exit: 300 }}
                     >
                         <li key={'input'} className='react-fine-uploader-gallery-file'>
-                            <FileInputComponent uploader={ uploader }  { ...fileInputProps }/>
+                            <FileInputComponent uploader={ uploader } xviewUploadImage={ xviewUploadImage }  { ...fileInputProps }/>
                         </li>
                     </CSSTransition>
                 </TransitionGroup>
@@ -343,7 +346,7 @@ const MaybeDropzone = ({ children, content, hasVisibleFiles, uploader, ...props 
     )
 }
 
-const FileInputComponent = ({ uploader, ...props }) => {
+const FileInputComponent = ({ uploader, xviewUploadImage, ...props }) => {
     const { children, ...fileInputProps } = props
     const content = children || (
         <span>
@@ -355,6 +358,7 @@ const FileInputComponent = ({ uploader, ...props }) => {
     return (
         <FileInput className='react-fine-uploader-gallery-file-input-container'
                    uploader={ uploader }
+                   xviewUploadImage= { xviewUploadImage }
                    { ...fileInputProps }
         >
             <span className='react-fine-uploader-gallery-file-input-content'>

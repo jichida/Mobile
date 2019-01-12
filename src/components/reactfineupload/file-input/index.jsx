@@ -27,11 +27,12 @@ class FileInput extends Component {
     }
 
     render() {
-        const { text, uploader, ...elementProps } = this.props // eslint-disable-line no-unused-vars
+        const { text, uploader, xviewUploadImage, ...elementProps } = this.props // eslint-disable-line no-unused-vars
 
         return (
             <StyleableElement { ...elementProps }
                 key={ this.state.key }
+                xviewUploadImage={ xviewUploadImage }
                 onChange={ this._onFilesSelected }
             >
                 {
@@ -48,8 +49,14 @@ class FileInput extends Component {
     }
 }
 
-const onFilesSelected = function(imgArray) {
-    this.props.uploader.methods.addFiles(imgArray)
+// const onFilesSelected = function(imgArray) {
+//     console.log('Will Upload...')
+//     this.props.uploader.methods.addFiles(imgArray)
+//     this._resetInput()
+// }
+
+const onFilesSelected = function(onChangeEvent) {
+    this.props.uploader.methods.addFiles(onChangeEvent.target)
     this._resetInput()
 }
 

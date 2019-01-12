@@ -8,6 +8,10 @@ import Gallery from '../reactfineupload/gallery'
 import '../reactfineupload/gallery/gallery.css'
 import './index.less'
 
+import ImageA from './search_a.png';
+import ImageB from './search_b.png';
+import ImageC from './search_c.png';
+
 const initFiles = [
   {
     'id': 0,
@@ -62,6 +66,14 @@ class Index extends Component {
     })
   }
 
+  xviewUploadImage = (param,callback)=>{
+  callback({
+    code:0,
+    message:'success',
+    data:[ImageA,ImageB,ImageC]
+  })
+};
+
   render() {
 
     return (
@@ -75,7 +87,11 @@ class Index extends Component {
         height:'100%'
   }}>
       <div className="search_box">
-        <Gallery uploader={ uploader } files={this.state.files} onChange={this.handleChange} />
+        <Gallery uploader={ uploader } 
+                files={this.state.files} 
+                onChange={this.handleChange} 
+                xviewUploadImage={this.xviewUploadImage}  
+        />
       </div>
       </div>
     );

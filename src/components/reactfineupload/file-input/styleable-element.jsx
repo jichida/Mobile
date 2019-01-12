@@ -1,8 +1,6 @@
 import React from 'react'
 import convert from './base64toblob';
-import ImageA from './search_a.png';
-import ImageB from './search_b.png';
-import ImageC from './search_c.png';
+
 
 const containerStyle = {
     display: 'inline-block',
@@ -36,24 +34,26 @@ const inputStyle = {
 //     </div>
 // )
 
-const xviewUploadImage = (param,callback)=>{
-  callback({
-    code:0,
-    message:'success',
-    data:[ImageA,ImageB,ImageC]
-  })
-};
+// const xviewUploadImage = (param,callback)=>{
+//   callback({
+//     code:0,
+//     message:'success',
+//     data:[ImageA,ImageB,ImageC]
+//   })
+// };
 
-const StyleableFileInput = ({ children, className, onChange, ...params }) => {
+const StyleableFileInput = ({ children, className, onChange, xviewUploadImage, ...params }) => {
 
     const onClickSelPhoto = ()=>{
+        let changeEvent = {
+            target: []
+        }
         xviewUploadImage({},(result)=>{
-            let blobData = [];
             for( const item of result.data){
-                blobData.push(convert(item))
+                changeEvent.target.push(convert(item))
             }
 
-            onChange(blobData);
+            onChange(changeEvent);
         });
     }
 
@@ -62,12 +62,21 @@ const StyleableFileInput = ({ children, className, onChange, ...params }) => {
            style={ containerStyle }
       >
           { children }
-          <div
-                className='react-fine-uploader-file-input'
-                onClick ={ onClickSelPhoto }
-                style={ inputStyle }
-                type='file'
-          />
+          { xviewUploadImage ?
+                (<div
+                        className='react-fine-uploader-file-input'
+                        onClick ={ onClickSelPhoto }
+                        style={ inputStyle }
+                        type='file'
+                />)
+                : (<input { ...params }
+                    className='react-fine-uploader-file-input'
+                    onChange={ onChange }
+                    style={ inputStyle }
+                    type='file'
+                    />
+                )
+          }
       </div>
   );
 }
