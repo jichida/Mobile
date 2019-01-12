@@ -71,12 +71,12 @@ class Index extends Component {
   }
 
   xviewUploadImage = (param,callback)=>{
-  callback({
-    code:0,
-    message:'success',
-    data:[ImageA,ImageB,ImageC]
-  })
-};
+    callback({
+      code:0,
+      message:'success',
+      data:[ImageA,ImageB,ImageC]
+    })
+  };
 
   render() {
 

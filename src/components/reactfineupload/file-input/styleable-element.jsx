@@ -42,6 +42,25 @@ const inputStyle = {
 //   })
 // };
 
+const getRandomName = () => {
+    const date = new Date()
+    const year = date.getFullYear()
+    const month = date.getMonth() + 1
+    const day = date.getDate()
+    const hour = date.getHours()
+    const minute = date.getMinutes()
+    const second = date.getSeconds()
+    const msecond = date.getMilliseconds()
+    const random = Math.round(Math.random()*100)
+  
+    return [year, month, day].map(formatNumber).join('') +  [hour, minute, second, msecond].map(formatNumber).join('') + random;
+}
+  
+const formatNumber = n => {
+    n = n.toString()
+    return n[1] ? n : '0' + n
+}
+
 const StyleableFileInput = ({ children, className, onChange, xviewUploadImage, ...params }) => {
 
     const onClickSelPhoto = ()=>{
@@ -50,7 +69,9 @@ const StyleableFileInput = ({ children, className, onChange, xviewUploadImage, .
         }
         xviewUploadImage({},(result)=>{
             for( const item of result.data){
-                changeEvent.target.push(convert(item))
+                let blob = convert(item);
+                let name = getRandomName();
+                changeEvent.target.push({blob, name})
             }
 
             onChange(changeEvent);

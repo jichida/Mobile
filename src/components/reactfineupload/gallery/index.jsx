@@ -99,10 +99,11 @@ class Gallery extends Component {
         this._onComplete = (id, name, res) => {
             const visibleFiles = this.state.visibleFiles;
             const fromServer = false;
-            visibleFiles.push({id, fromServer});
+            const thumbnailUrl = this.props.baseUrl + name;
+            visibleFiles.push({id, thumbnailUrl, fromServer});
 
             const files = this.props.files;
-            files.push(`${this.props.baseUrl}${name}`)
+            files.push(thumbnailUrl)
             this.props.onChange(files);
         }
 
@@ -110,11 +111,14 @@ class Gallery extends Component {
             const fileIndex = this._findFileIndex(id);
             if (fileIndex >= 0) {
                 const visibleFiles = this.state.visibleFiles;
+
+                const files = this.props.files.filter((v)=>{return v !== visibleFiles[fileIndex].thumbnailUrl});
+
                 visibleFiles.splice(fileIndex, 1)
                 this.setState({visibleFiles})
+                console.log(id)
                 
-                const files = this.props.files;
-                files.splice(id, 1);
+                
                 this.props.onChange(files);
             }
         }
